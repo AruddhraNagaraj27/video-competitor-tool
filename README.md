@@ -468,4 +468,4 @@ For issues or questions:
 
 Your live URL will look like: `https://your-app.vercel.app`
 
-Good luck! 🚀
+Good luck! 
