@@ -13,44 +13,51 @@ export default function ReportPage({ reportData, onBack }) {
   const [downloadLoading, setDownloadLoading] = React.useState(false)
   const [selectedSection, setSelectedSection] = React.useState('summary')
 
-  const handleDownloadPPT = async () => {
-    setDownloadLoading(true)
-    try {
-      const response = await fetch('/api/download-report', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          analysisReport: reportData.report,
-        }),
-      })
+const handleDownloadPPT = async () => {
+  setDownloadLoading(true)
 
-      if (!response.ok) {
-        throw new Error('Failed to download report')
-      }
+  try {
+    const API_URL = import.meta.env.VITE_API_URL
 
-      // Get filename from header or use default
-      const filename = response.headers
+    const response = await fetch(`${API_URL}/api/download-report`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        analysisReport: reportData.report,
+      }),
+    })
+
+    if (!response.ok) {
+      throw new Error('Failed to download report')
+    }
+
+    const filename =
+      response.headers
         .get('content-disposition')
         ?.split('filename=')[1]
         ?.replace(/"/g, '') || `Video_Report_${Date.now()}.pptx`
 
-      const blob = await response.blob()
-      const url = window.URL.createObjectURL(blob)
-      const link = document.createElement('a')
-      link.href = url
-      link.download = filename
-      document.body.appendChild(link)
-      link.click()
-      window.URL.revokeObjectURL(url)
-      document.body.removeChild(link)
-    } catch (error) {
-      alert(`Error: ${error.message}`)
-    } finally {
-      setDownloadLoading(false)
-    }
+    const blob = await response.blob()
+    const url = window.URL.createObjectURL(blob)
+
+    const link = document.createElement('a')
+    link.href = url
+    link.download = filename
+
+    document.body.appendChild(link)
+    link.click()
+
+    window.URL.revokeObjectURL(url)
+    document.body.removeChild(link)
+
+  } catch (error) {
+    alert(`Error: ${error.message}`)
+  } finally {
+    setDownloadLoading(false)
   }
+}
 
   const sections = [
     { id: 'summary', label: 'Executive Summary', icon: '📊' },
