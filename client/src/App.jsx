@@ -9,37 +9,42 @@ function App() {
   const [isLoading, setIsLoading] = useState(false)
 
   const handleGenerateReport = async (companyName, competitors) => {
-    setIsLoading(true)
-    try {
-      const response = await fetch('/api/generate-report', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          companyName,
-          competitors: competitors.filter(c => c && c.trim()),
-        }),
-      })
+  setIsLoading(true)
 
-      if (!response.ok) {
-        const error = await response.json()
-        throw new Error(error.error || 'Failed to generate report')
-      }
+  try {
+    const API_URL = import.meta.env.VITE_API_URL
 
-      const data = await response.json()
-      setReportData({
+    const response = await fetch(`${API_URL}/api/generate-report`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
         companyName,
-        competitors,
-        report: data.report,
-      })
-      setCurrentPage('report')
-    } catch (error) {
-      alert(`Error: ${error.message}`)
-    } finally {
-      setIsLoading(false)
+        competitors: competitors.filter(c => c && c.trim()),
+      }),
+    })
+
+    const data = await response.json()
+
+    if (!response.ok) {
+      throw new Error(data.error || 'Failed to generate report')
     }
+
+    setReportData({
+      companyName,
+      competitors,
+      report: data.report,
+    })
+
+    setCurrentPage('report')
+
+  } catch (error) {
+    alert(`Error: ${error.message}`)
+  } finally {
+    setIsLoading(false)
   }
+}
 
   const handleBackToInput = () => {
     setCurrentPage('input')
