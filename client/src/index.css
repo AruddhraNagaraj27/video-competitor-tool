@@ -1,0 +1,146 @@
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #1a3a52;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #2a4a62;
+}
+
+.gradient-text {
+  background: linear-gradient(135deg, #d4af37 0%, #f0c672 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+@keyframes gradientShine {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.gradient-text-animated {
+  background: linear-gradient(270deg, #d4af37, #f0c672, #ffffff, #d4af37);
+  background-size: 300% 300%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: gradientShine 4s ease infinite;
+}
+
+@keyframes titleFloat {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+.title-animate {
+  display: inline-block;
+  animation: titleFloat 3s ease-in-out infinite;
+}
+
+.card-hover {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.card-hover:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2);
+}
+
+.btn-primary {
+  @apply px-8 py-3 rounded-lg font-semibold transition-all duration-300;
+  @apply bg-gold text-navy hover:bg-yellow-400 shadow-lg hover:shadow-xl;
+}
+
+.btn-secondary {
+  @apply px-8 py-3 rounded-lg font-semibold transition-all duration-300;
+  @apply bg-white text-navy hover:bg-gray-100 shadow-lg hover:shadow-xl;
+}
+
+.input-field {
+  @apply w-full px-4 py-2 rounded-lg border-2 border-gray-300;
+  @apply focus:border-gold focus:outline-none transition-colors;
+  @apply bg-white text-navy;
+}
+
+.chart-container {
+  @apply bg-white rounded-lg shadow-lg p-6;
+}
+
+.stat-card {
+  @apply bg-white rounded-lg shadow-md p-4;
+  @apply border-l-4 border-gold;
+}
+
+.ranking-badge {
+  @apply inline-block rounded-full px-4 py-2 font-bold text-white;
+}
+
+.ranking-badge.rank-1 {
+  @apply bg-yellow-500;
+}
+
+.ranking-badge.rank-2 {
+  @apply bg-gray-400;
+}
+
+.ranking-badge.rank-3 {
+  @apply bg-orange-600;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-in {
+  animation: fadeIn 0.5s ease-out;
+}
+
+@keyframes pulse-slow {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.pulse-slow {
+  animation: pulse-slow 2s ease-in-out infinite;
+}
