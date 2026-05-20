@@ -19,6 +19,10 @@ const handleDownloadPPT = async () => {
   try {
     const API_URL = import.meta.env.VITE_API_URL
 
+    if (!API_URL) {
+      throw new Error('VITE_API_URL is not configured')
+    }
+
     const response = await fetch(`${API_URL}/api/download-report`, {
       method: 'POST',
       headers: {
@@ -30,28 +34,28 @@ const handleDownloadPPT = async () => {
     })
 
     if (!response.ok) {
-      throw new Error('Failed to download report')
+      const errorText = await response.text()
+      throw new Error(errorText || 'Failed to download report')
     }
+
+    const blob = await response.blob()
 
     const filename =
       response.headers
         .get('content-disposition')
         ?.split('filename=')[1]
-        ?.replace(/"/g, '') || `Video_Report_${Date.now()}.pptx`
+        ?.replace(/"/g, '') || `Video_Competitor_Report_${Date.now()}.pptx`
 
-    const blob = await response.blob()
     const url = window.URL.createObjectURL(blob)
-
     const link = document.createElement('a')
+
     link.href = url
     link.download = filename
-
     document.body.appendChild(link)
     link.click()
 
     window.URL.revokeObjectURL(url)
     document.body.removeChild(link)
-
   } catch (error) {
     alert(`Error: ${error.message}`)
   } finally {

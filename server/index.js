@@ -73,16 +73,10 @@ app.post('/api/generate-report', async (req, res) => {
     const analysisReport = analysisService.createAnalysisReport(companiesData);
 
     // Generate PowerPoint
-    console.log('📄 Generating PowerPoint...');
-    const pptBuffer = await generatePowerPoint(analysisReport);
-
-    // Return both report data and PowerPoint
     res.json({
-      success: true,
-      report: analysisReport,
-      pptGenerated: true,
-      pptSize: pptBuffer.byteLength,
-    });
+  success: true,
+  report: analysisReport,
+});
   } catch (error) {
     console.error('Error generating report:', error.message);
     res.status(500).json({
@@ -113,18 +107,28 @@ app.post('/api/download-report', async (req, res) => {
       .join('_vs_')
       .replace(/\s+/g, '_');
 
-    const filename = `Video_Competitor_Report_${companyNames}_${new Date().getTime()}.pptx`;
+    const filename = `Video_Competitor_Report_${companyNames}_${Date.now()}.pptx`;
 
-    res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.presentationml.presentation');
-    res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
-    res.send(Buffer.from(pptBuffer));
+    res.setHeader(
+      'Content-Type',
+      'application/vnd.openxmlformats-officedocument.presentationml.presentation'
+    );
+
+    res.setHeader(
+      'Content-Disposition',
+      `attachment; filename="${filename}"`
+    );
+
+    return res.send(pptBuffer);
   } catch (error) {
-    console.error('Error downloading report:', error.message);
-    res.status(500).json({
+    console.error('Error downloading report:', error);
+
+    return res.status(500).json({
       error: error.message || 'Failed to generate PowerPoint',
     });
   }
 });
+
 
 /**
  * Search company endpoint (for autocomplete)

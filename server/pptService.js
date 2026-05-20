@@ -27,7 +27,6 @@ function generatePowerPointReport(analysisReport) {
   const companies = analysisReport.companies || [];
   const rankings = analysisReport.rankings || [];
 
-  // Slide 1: Cover
   const slide1 = prs.addSlide();
   slide1.background = { color: colors.darkNavy };
 
@@ -77,7 +76,6 @@ function generatePowerPointReport(analysisReport) {
     fontFace: 'Calibri',
   });
 
-  // Slide 2: Executive Summary
   const slide2 = prs.addSlide();
   addSlideHeader(slide2, 'Executive Summary', colors, prs);
 
@@ -113,7 +111,6 @@ function generatePowerPointReport(analysisReport) {
     y += 0.65;
   });
 
-  // Slide 3: Channel Overview
   const slide3 = prs.addSlide();
   addSlideHeader(slide3, 'Channel Overview Comparison', colors, prs);
 
@@ -145,7 +142,6 @@ function generatePowerPointReport(analysisReport) {
     colors
   );
 
-  // Slide 4: Content Performance
   const slide4 = prs.addSlide();
   addSlideHeader(slide4, 'Content Performance - Top Videos', colors, prs);
 
@@ -206,7 +202,6 @@ function generatePowerPointReport(analysisReport) {
     y += 1.02;
   });
 
-  // Slide 5: Engagement Analysis
   const slide5 = prs.addSlide();
   addSlideHeader(slide5, 'Engagement Analysis', colors, prs);
 
@@ -239,7 +234,6 @@ function generatePowerPointReport(analysisReport) {
     align: 'center',
   });
 
-  // Slide 6: Posting Frequency
   const slide6 = prs.addSlide();
   addSlideHeader(slide6, 'Posting Frequency & Consistency', colors, prs);
 
@@ -292,7 +286,6 @@ function generatePowerPointReport(analysisReport) {
     colors
   );
 
-  // Slide 7: Content Topics
   const slide7 = prs.addSlide();
   addSlideHeader(slide7, 'Content Topics & Themes', colors, prs);
 
@@ -338,7 +331,6 @@ function generatePowerPointReport(analysisReport) {
     colors
   );
 
-  // Slide 8: Gap Analysis
   const slide8 = prs.addSlide();
   addSlideHeader(slide8, 'Gap Analysis - Missed Opportunities', colors, prs);
 
@@ -387,7 +379,6 @@ function generatePowerPointReport(analysisReport) {
     y += 0.98;
   });
 
-  // Slide 9: Strategic Recommendations
   const slide9 = prs.addSlide();
   addSlideHeader(slide9, 'Strategic Recommendations', colors, prs);
 
@@ -400,7 +391,6 @@ function generatePowerPointReport(analysisReport) {
       h: 0.38,
       fill: { color: colors.lightBlue },
       line: { color: colors.blue, pt: 1 },
-      radius: 0.08,
     });
 
     slide9.addText(company.companyName, {
@@ -442,7 +432,6 @@ function generatePowerPointReport(analysisReport) {
     colors
   );
 
-  // Slide 10: Final Rankings
   const slide10 = prs.addSlide();
   addSlideHeader(slide10, 'Final Rankings & Scoring', colors, prs);
 
@@ -477,7 +466,6 @@ function generatePowerPointReport(analysisReport) {
     colors
   );
 
-  // Slide 11: Key Takeaways
   const slide11 = prs.addSlide();
   addSlideHeader(slide11, 'Key Takeaways & Next Steps', colors, prs);
 
@@ -523,9 +511,6 @@ function generatePowerPointReport(analysisReport) {
   return prs;
 }
 
-/**
- * Header
- */
 function addSlideHeader(slide, title, colors, prs) {
   slide.background = { color: colors.white };
 
@@ -551,9 +536,6 @@ function addSlideHeader(slide, title, colors, prs) {
   });
 }
 
-/**
- * Styled Table
- */
 function addStyledTable(slide, rows, x, y, w, colors) {
   const tableRows = rows.map((row, rowIndex) =>
     row.map((cell) => ({
@@ -588,18 +570,14 @@ function addStyledTable(slide, rows, x, y, w, colors) {
   });
 }
 
-/**
- * Insight Box
- */
 function addInsightBox(slide, heading, text, x, y, w, colors) {
-  slide.addShape('roundRect', {
+  slide.addShape(prsShapeRoundRect(), {
     x,
     y,
     w,
     h: 0.8,
     fill: { color: colors.lightBlue },
     line: { color: colors.blue, pt: 1 },
-    radius: 0.15,
   });
 
   slide.addText(heading, {
@@ -623,9 +601,10 @@ function addInsightBox(slide, heading, text, x, y, w, colors) {
   });
 }
 
-/**
- * Build recommendations dynamically
- */
+function prsShapeRoundRect() {
+  return 'roundRect';
+}
+
 function buildRecommendations(company) {
   const recommendations = [];
 
@@ -661,9 +640,6 @@ function buildRecommendations(company) {
   return recommendations;
 }
 
-/**
- * Executive insights
- */
 function buildExecutiveInsights(companies, rankings) {
   const insights = [];
 
@@ -784,10 +760,10 @@ async function generatePowerPoint(analysisReport) {
     const prs = generatePowerPointReport(analysisReport);
 
     return await prs.write({
-      outputType: 'arraybuffer',
+      outputType: 'nodebuffer',
     });
   } catch (error) {
-    console.error('Error generating PowerPoint:', error.message);
+    console.error('Error generating PowerPoint:', error);
     throw error;
   }
 }
